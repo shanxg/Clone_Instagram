@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/midGray</color>
+    <color name="colorPrimaryDark">@android:color/black</color>
+    <color name="colorAccent">#a03d89</color>
+    <color name="blueLink">#3E27F8</color>
+    <color name="myGray">#DBDBDB</color>
+    <color name="loginPurple">#462759</color>
+    <color name="myTransGray">#80DBDBDB</color>
+    <color name="myTransparent">#00DBDBDB</color>
+    <color name="midGray">#EBEBEB</color>
+    <color name="myVanilla">#E9E8BA</color>
+    <color name="myDark">#603C3F41</color>
+
+
+</resources>

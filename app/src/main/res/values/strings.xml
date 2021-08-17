@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Clone Instagram</string>
+    <string name="insta_register_text">Register</string>
+    <string name="text_user_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_user_name">Name</string>
+    <string name="text_register">Don\'t have an account ?\nClick here to register.</string>
+    <string name="forgot_password_text">Forgot your password ? Click here!</string>
+    <string name="text_login">Login</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_posts">Posts</string>
+    <string name="text_following">Following</string>
+    <string name="text_edit_profile">EDIT PROFILE</string>
+    <string name="text_followers">Followers</string>
+    <string name="text_quote">Quote</string>
+    <string name="text_follow">Follow</string>
+    <string name="text_unfollow">Unfollow</string>
+    <string name="text_user_has_no_posts">User has no posts.</string>
+</resources>
