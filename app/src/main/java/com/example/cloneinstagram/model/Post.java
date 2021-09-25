@@ -2,11 +2,9 @@ package com.example.cloneinstagram.model;
 
 import com.example.cloneinstagram.activity.MainActivity;
 import com.example.cloneinstagram.config.ConfigurateFirebase;
-import com.example.cloneinstagram.helper.UserFirebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class Post implements Serializable {
 
@@ -25,9 +22,7 @@ public class Post implements Serializable {
     public static final int POST_COMMENTS_REF = -12;
     public static final int POST_COMMENTS_LIST = -13;
 
-
-
-    private String postPhoto, postTitle, postDescrition, postDate, postKey;
+    private String postPhoto, postTitle, postDescription, postDate, postKey;
     private int likeCount, commentsCount;
     private User postUser;
 
@@ -65,7 +60,11 @@ public class Post implements Serializable {
     }
 
     private void updateFeed() {
-        DatabaseReference followersRef = ConfigurateFirebase.getFireDBRef().child("users").child(postUser.getUserID()).child("followersList");
+        DatabaseReference followersRef =
+                ConfigurateFirebase.getFireDBRef()
+                        .child("users")
+                        .child(postUser.getUserID())
+                        .child("followersList");
 
         Query query = followersRef.orderByChild("userId");
 
@@ -73,26 +72,49 @@ public class Post implements Serializable {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> followersIdList = new ArrayList<>();
+
                 if (dataSnapshot.exists()) {
+
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
                         String userId = data.getKey();
                         followersIdList.add(userId);
                     }
 
+                    DatabaseReference feedRef =
+                            ConfigurateFirebase.getFireDBRef()
+                                    .child("feed");
+
+                    DatabaseReference myFeedRef =
+                            ConfigurateFirebase.getFireDBRef()
+                                    .child("feed")
+                                    .child(postUser.getUserID())
+                                    .push();
+
+                    Map feed = new HashMap();
+                    feed.put("/userId", postUser.getUserID());
+                    feed.put("/postKey", getPostKey());
+
                     for (String followerId : followersIdList) {
-                        DatabaseReference feedRef = ConfigurateFirebase.getFireDBRef().child("feed").child(followerId).push();
-                        DatabaseReference myFeedRef = ConfigurateFirebase.getFireDBRef().child("feed").child(postUser.getUserID()).push();
 
-                        Map feed = new HashMap();
-                        feed.put("/userId", postUser.getUserID());
-                        feed.put("/postKey", getPostKey());
-
+                        feedRef.child(followerId).push();
                         feedRef.updateChildren(feed);
-                        myFeedRef.updateChildren(feed);
                     }
+                    myFeedRef.updateChildren(feed);
 
+                }else {
+
+                    DatabaseReference myFeedRef =
+                            ConfigurateFirebase.getFireDBRef()
+                                    .child("feed")
+                                    .child(postUser.getUserID())
+                                    .push();
+
+                    Map feed = new HashMap();
+                    feed.put("/userId", postUser.getUserID());
+                    feed.put("/postKey", getPostKey());
+
+                    myFeedRef.updateChildren(feed);
                 }
-
             }
 
             @Override
@@ -132,12 +154,12 @@ public class Post implements Serializable {
     }
 
 
-    public String getPostDescrition() {
-        return postDescrition;
+    public String getPostDescription() {
+        return postDescription;
     }
 
-    public void setPostDescrition(String postDescrition) {
-        this.postDescrition = postDescrition;
+    public void setPostDescription(String postDescription) {
+        this.postDescription = postDescription;
     }
 
 

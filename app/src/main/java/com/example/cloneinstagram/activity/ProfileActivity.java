@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -19,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.example.cloneinstagram.R;
 import com.example.cloneinstagram.adapter.AdapterGrid;
 import com.example.cloneinstagram.config.ConfigurateFirebase;
-import com.example.cloneinstagram.fragment.FeedFragment;
 import com.example.cloneinstagram.helper.UserFirebase;
 import com.example.cloneinstagram.model.Post;
 import com.example.cloneinstagram.model.User;
@@ -32,12 +33,16 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private boolean wasStopped;
 
     private int postsCount, followersCount, followingCount;
     private List<String> followingList = new ArrayList<>();
@@ -57,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ValueEventListener selectedUserListener;
 
     private User selectedUser, loggedUser;
+
 
 
     @Override
@@ -83,6 +89,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void getDataNLoadViewInterface(){
+
         //Retrieving Selected User Data
 
         Bundle userBundle = getIntent().getExtras();
@@ -90,6 +97,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             selectedUser = (User) userBundle.getSerializable("user");
             loggedUser = MainActivity.loggedUser;
+
 
             setValueEventListeners();
             loadViewInterface();
@@ -121,6 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
         selectedTextDisplayEmail = findViewById(R.id.textDisplayEmail);
 
         buttonFollow = findViewById(R.id.buttonProfileAction);
+
 
         textViewNoPosts = findViewById(R.id.textViewNoPosts);
         selectedProfileGridView = findViewById(R.id.profileGridView);
@@ -196,6 +205,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 loggedUser.addInFollowingList(selectedUser);
                 selectedUser.addInFollowersList(loggedUser);
+                setFeed();
 
                 isFollowing = true;
 
@@ -230,21 +240,91 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void followingState(boolean isFollowing){
 
-        if( !isFollowing){
-            buttonFollow.setText(getResources().getString(R.string.text_follow));
+        if(isFollowing){
+            buttonFollow.setText(getResources().getString(R.string.text_unfollow));
 
         }else {
-            buttonFollow.setText(getResources().getString(R.string.text_unfollow));
+
+            buttonFollow.setText(getResources().getString(R.string.text_follow));
+
         }
     }
 
+    private void setFeed() {
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+
+                DatabaseReference feedRef =
+                        ConfigurateFirebase.getFireDBRef()
+                                .child("feed")
+                                .child(selectedUser.getUserID());
+
+                feedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+
+                            try {
+
+                                DatabaseReference myFeedRef =
+                                        ConfigurateFirebase.getFireDBRef()
+                                                .child("feed")
+                                                .child(UserFirebase.getCurrentUserID());
+
+                                HashMap myFeedMap = new HashMap();
+
+                                int i = 0;
+
+                                for (DataSnapshot feedData : dataSnapshot.getChildren()) {
+                                    i++;
+
+
+                                    HashMap feedMap = (HashMap) feedData.getValue();
+
+                                    String postUserId = (String) feedMap.get("userId");
+                                    String postKey = (String) feedMap.get("postKey");
+
+
+                                    if (selectedUser.getUserID().equals(postUserId)) {
+
+                                        HashMap feed = new HashMap();
+
+                                        feed.put("userId", postUserId);
+                                        feed.put("postKey", postKey);
+
+
+                                        myFeedMap.put(postKey, feed);
+                                    }
+
+                                    if (i == dataSnapshot.getChildrenCount()) {
+
+                                        myFeedRef.updateChildren(myFeedMap);
+                                    }
+                                }
+
+                            } catch (Exception e) {
+                                throwToast(e.getMessage(), true);
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+        });
+    }
+
     private void setValueEventListeners(){
+
         DatabaseReference usersRef = ConfigurateFirebase.getFireDBRef().child("users");
         selectedUserRef = usersRef.child(selectedUser.getUserID());
 
         postsRef = ConfigurateFirebase.getFireDBRef().child("posts").child(selectedUser.getUserID());
-
-
 
         // SINGLE VALUE LISTENER
         UserFirebase.getUserData(UserFirebase.getCurrentUserID(),
@@ -262,8 +342,9 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(selectedUser!=null) {
+        if(wasStopped) {
             getDataNLoadViewInterface();
+            wasStopped = false;
         }
     }
 
@@ -274,6 +355,8 @@ public class ProfileActivity extends AppCompatActivity {
             selectedUserRef.removeEventListener(selectedUserListener);
         }
         postsRef.removeEventListener(valueEventListener(UserFirebase.GET_POSTS_DATA));
+
+        wasStopped = true;
     }
 
     @Override
@@ -321,31 +404,39 @@ public class ProfileActivity extends AppCompatActivity {
         return  new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    switch (requestCode) {
 
-                        case UserFirebase.GET_USER_DATA:
+                switch (requestCode) {
+
+                    case UserFirebase.GET_USER_DATA:
+                        if (dataSnapshot.exists()) {
                             selectedUser = dataSnapshot.getValue(User.class);
                             loadViewInterface();
-                            break;
+                        }
+                        break;
 
-                        case UserFirebase.GET_FOLLOWING_LIST:
-                            for(DataSnapshot usersKeyData: dataSnapshot.getChildren()){
+                    case UserFirebase.GET_FOLLOWING_LIST:
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot usersKeyData : dataSnapshot.getChildren()) {
                                 String followingID = usersKeyData.getKey();
                                 followingList.add(followingID);
                             }
                             isFollowing = followingList.contains(selectedUser.getUserID());
                             followingState(isFollowing);
-                            break;
+                        } else
+                            followingState(false);
+                        break;
 
-                        case UserFirebase.GET_FOLLOWERS_COUNT:
+                    case UserFirebase.GET_FOLLOWERS_COUNT:
+                        if (dataSnapshot.exists()) {
                             followersCount = dataSnapshot.getValue(Integer.class);
                             updateFollowersCount(followersCount, loggedUser.getFollowingCount());
-                            break;
+                        }
+                        break;
 
-                        case UserFirebase.GET_POSTS_DATA:
+                    case UserFirebase.GET_POSTS_DATA:
+                        if (dataSnapshot.exists()) {
 
-                            if(textViewNoPosts.getVisibility()==View.VISIBLE)
+                            if (textViewNoPosts.getVisibility() == View.VISIBLE)
                                 textViewNoPosts.setVisibility(View.GONE);
 
                             photosUrl.clear();
@@ -357,24 +448,18 @@ public class ProfileActivity extends AppCompatActivity {
                             }
 
                             loadImageGrid();
-                            break;
 
+                        } else {
 
-                    }
-                }else {
-                    switch (requestCode){
-                        case UserFirebase.GET_POSTS_DATA:
                             selectedProfileProgressBar.setVisibility(View.GONE);
                             textViewNoPosts.setVisibility(View.VISIBLE);
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         };
     }
 
@@ -384,6 +469,5 @@ public class ProfileActivity extends AppCompatActivity {
                         .Builder(this)
                         .build();
         ImageLoader.getInstance().init(config);
-
     }
 }

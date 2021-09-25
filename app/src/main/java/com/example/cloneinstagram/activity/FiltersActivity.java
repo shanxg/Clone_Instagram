@@ -74,35 +74,38 @@ public class FiltersActivity extends AppCompatActivity {
         if (image != null) {
             atFilterImage = image.copy(image.getConfig(), true);
             filterImageView.setImageBitmap(atFilterImage);
+
+
+            adapterFilters = new AdapterImageFilters(filtersList, this);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+            recyclerImageFilter.setLayoutManager(layoutManager);
+            recyclerImageFilter.setAdapter(adapterFilters);
+
+            getFiltersData();
+
+            recyclerImageFilter.addOnItemTouchListener(
+                    new RecyclerItemClickListener(
+                            this, recyclerImageFilter,
+                            new RecyclerItemClickListener.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+
+                                    Filter filter = filtersList.get(position).filter;
+
+                                    atFilterImage.recycle();
+                                    atFilterImage = image.copy(image.getConfig(), true);
+                                    filterImageView.setImageBitmap(filter.processFilter(atFilterImage));
+                                }
+
+                                @Override
+                                public void onLongItemClick(View view, int position) {
+                                }
+
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                }
+                            }));
         }
-
-
-        adapterFilters = new AdapterImageFilters(filtersList, this);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
-        recyclerImageFilter.setLayoutManager(layoutManager);
-        recyclerImageFilter.setAdapter(adapterFilters);
-
-        getFiltersData();
-
-        recyclerImageFilter.addOnItemTouchListener(
-                new RecyclerItemClickListener(
-                        this, recyclerImageFilter,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-
-                                Filter filter = filtersList.get(position).filter;
-
-                                atFilterImage.recycle();
-                                atFilterImage = image.copy(image.getConfig(), true);
-                                filterImageView.setImageBitmap(filter.processFilter(atFilterImage));
-                            }
-                            @Override
-                            public void onLongItemClick(View view, int position) {}
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
-                        }));
-
     }
 
     private void getFiltersData() {

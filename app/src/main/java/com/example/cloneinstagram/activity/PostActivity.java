@@ -7,7 +7,6 @@ import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,31 +17,22 @@ import android.widget.Toast;
 
 import com.example.cloneinstagram.R;
 import com.example.cloneinstagram.config.ConfigurateFirebase;
-import com.example.cloneinstagram.fragment.FeedFragment;
 import com.example.cloneinstagram.helper.BitmapHelper;
 import com.example.cloneinstagram.helper.DateUtil;
 import com.example.cloneinstagram.helper.UserFirebase;
 import com.example.cloneinstagram.model.Post;
 import com.example.cloneinstagram.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.zomato.photofilters.FilterPack;
-import com.zomato.photofilters.imageprocessors.Filter;
-import com.zomato.photofilters.utils.ThumbnailItem;
-import com.zomato.photofilters.utils.ThumbnailsManager;
 
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
 import java.util.UUID;
 
 public class PostActivity extends AppCompatActivity {
@@ -116,7 +106,7 @@ public class PostActivity extends AppCompatActivity {
             Post post = new Post();
 
             post.setPostTitle(postTitle);
-            if (postDescription != null) post.setPostDescrition(postDescription);
+            if (postDescription != null) post.setPostDescription(postDescription);
 
             uploadImage(post);
 
@@ -183,8 +173,8 @@ public class PostActivity extends AppCompatActivity {
         if(!isSaved){
             throwToast("Upload error", true);
         }else {
-            throwToast("Post salvo com sucesso", false);
-            BitmapHelper.getInstance().clear();
+            throwToast("Post saved", false);
+
             incrementPostsCount();
         }
 
@@ -221,10 +211,10 @@ public class PostActivity extends AppCompatActivity {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         ActivityCompat.finishAffinity(this);
+        BitmapHelper.getInstance().clear();
     }
 
     /** #############################    ACTIVITY PROCESSES    ################################ **/
-
 
 
     @Override

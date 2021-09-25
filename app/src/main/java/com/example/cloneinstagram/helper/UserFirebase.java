@@ -111,18 +111,9 @@ public class UserFirebase {
     }
 
     public static void getUserDataSingleValue(String userId, String child, ValueEventListener listener) {
-        /*
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            if (dataSnapshot.exists()){
-                Class valueClass = dataSnapshot.getValue().getClass();
-                dataValue = (String.valueOf(dataSnapshot.getValue(valueClass)));
-            }
-        }
-         */
+
         DatabaseReference usersRef = ConfigurateFirebase.getFireDBRef().child("users");
         DatabaseReference dataValueRef = usersRef.child(userId).child(child);
         dataValueRef.addListenerForSingleValueEvent(listener);
     }
-
-
 }

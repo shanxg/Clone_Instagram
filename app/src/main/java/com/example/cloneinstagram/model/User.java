@@ -147,7 +147,9 @@ public class User implements Serializable  {
         this.followingCount = followingCount;
 
         DatabaseReference userRef = ConfigurateFirebase.getFireDBRef()
-                .child(this.userID).child("followingCount");
+                .child("users")
+                .child(this.userID)
+                .child("followingCount");
 
         try {
             userRef.setValue(followingCount);
@@ -169,7 +171,9 @@ public class User implements Serializable  {
         this.followersCount = followersCount;
 
         DatabaseReference userRef = ConfigurateFirebase.getFireDBRef()
-                .child(this.userID).child("followersCount");
+                .child("users")
+                .child(this.userID)
+                .child("followersCount");
 
         try {
             userRef.setValue(followersCount);

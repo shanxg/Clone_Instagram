@@ -147,7 +147,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.FeedViewHolder
         // ##########################      POST DATA       ###########################
 
         holder.textPostTitle.setText(post.getPostTitle().toUpperCase());
-        holder.textPostDescription.setText(post.getPostDescrition());
+        holder.textPostDescription.setText(post.getPostDescription());
 
         String dateText = "posted " + post.getPostDate();
         holder.textPostDate.setText(dateText);

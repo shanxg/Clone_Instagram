@@ -170,6 +170,20 @@ public class ProfileFragment extends Fragment {
 
         myPostsRef = ConfigurateFirebase.getFireDBRef().child("posts").child(userId);
         myPostsRef.addValueEventListener(valueEventListener());
+
+        UserFirebase.getUserData(loggedUser.getUserID(), new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    loggedUser = MainActivity.loggedUser = dataSnapshot.getValue(User.class);
+                    if (loggedUser != null)
+                        loadViewInterface();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     @Override

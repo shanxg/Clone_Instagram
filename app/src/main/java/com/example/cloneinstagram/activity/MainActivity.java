@@ -16,7 +16,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,11 +27,9 @@ import com.example.cloneinstagram.fragment.FeedFragment;
 
 import com.example.cloneinstagram.fragment.ProfileFragment;
 import com.example.cloneinstagram.fragment.SearchFragment;
-import com.example.cloneinstagram.fragment.TestFragment;
 import com.example.cloneinstagram.helper.BitmapHelper;
 import com.example.cloneinstagram.helper.SystemPermissions;
 import com.example.cloneinstagram.helper.UserFirebase;
-import com.example.cloneinstagram.model.Post;
 import com.example.cloneinstagram.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,10 +38,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Collections;
-import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -82,12 +75,9 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-
-        UserFirebase.getUserData(UserFirebase.getCurrentUserID(), valueEventListener(UserFirebase.GET_LOGGED_USER_DATA));
+        UserFirebase.getUserData(UserFirebase.getCurrentUserID(),
+                valueEventListener(UserFirebase.GET_LOGGED_USER_DATA));
         //  STARTS ACTIVITY AFTER LOGGED USER IS SET
-
-
-
 
     }
 
@@ -105,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentTransaction.replace(R.id.viewPager, new FeedFragment()).commit();
 
-        //fragmentTransaction.replace(R.id.viewPager, new TestFragment()).commit();
     }
 
 
@@ -369,9 +358,9 @@ public class MainActivity extends AppCompatActivity {
 
     /** ##############################        UTILITIES        ################################# **/
 
-    private void throwToast(String msgText, boolean lenghLong){
+    private void throwToast(String msgText, boolean lengthLong){
 
-        if(lenghLong) {
+        if(lengthLong) {
 
             Toast.makeText(this,
                     msgText,
