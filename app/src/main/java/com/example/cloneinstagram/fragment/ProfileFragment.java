@@ -1,6 +1,7 @@
 package com.example.cloneinstagram.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ProfileFragment extends Fragment {
 
+    private Context context;
+
     private List<String> photosUrl = new ArrayList<>();
 
     private TextView textFollowingCount, textFollowersCount, textPostsCount, textDisplayQuote, textDisplayEmail, textViewNoPosts;
@@ -69,6 +72,8 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        context = container.getContext();
 
         loadInterface(view);
         initiateImageLoader();
@@ -143,7 +148,7 @@ public class ProfileFragment extends Fragment {
         profileProgressBar.setVisibility(View.GONE);
 
         if(adapterGrid==null) {
-            adapterGrid = new AdapterGrid(getActivity(), R.layout.adapter_grid, photosUrl);
+            adapterGrid = new AdapterGrid(context, R.layout.adapter_grid, photosUrl);
             profileGridView.setAdapter(adapterGrid);
         }
 
@@ -212,12 +217,18 @@ public class ProfileFragment extends Fragment {
                         textViewNoPosts.setVisibility(View.GONE);
 
                     photosUrl.clear();
+                    int i = 0;
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        i++;
                         Post post = data.getValue(Post.class);
                         if (post.getPostPhoto() != null && !post.getPostPhoto().isEmpty())
                             photosUrl.add(post.getPostPhoto());
+
+                        if (i == dataSnapshot.getChildrenCount())
+                            loadImageGrid();
                     }
-                    loadImageGrid();
+
+
                 } else {
                     textViewNoPosts.setVisibility(View.VISIBLE);
                     profileProgressBar.setVisibility(View.GONE);

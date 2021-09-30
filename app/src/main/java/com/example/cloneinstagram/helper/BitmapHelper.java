@@ -14,7 +14,9 @@ public class BitmapHelper {
     public Bitmap getBitmap() {        return bitmap;    }
     public void setBitmap(Bitmap bitmap) {        this.bitmap = bitmap;    }
 
-    public  void clear(){
+    public  boolean clear(){
         this.bitmap = null;
+
+        return bitmap==null;
     }
 }

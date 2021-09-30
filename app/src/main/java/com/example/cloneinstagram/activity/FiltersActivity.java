@@ -105,7 +105,8 @@ public class FiltersActivity extends AppCompatActivity {
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 }
                             }));
-        }
+        }else
+            finish();
     }
 
     private void getFiltersData() {
@@ -170,8 +171,6 @@ public class FiltersActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        Intent i  = new Intent(this, MainActivity.class);
-        startActivity(i);
         finish();
         return true;
     }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,8 +23,10 @@ import com.example.cloneinstagram.helper.DateUtil;
 import com.example.cloneinstagram.helper.UserFirebase;
 import com.example.cloneinstagram.model.Post;
 import com.example.cloneinstagram.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -192,16 +195,28 @@ public class PostActivity extends AppCompatActivity {
                             int postsCount = dataSnapshot.getValue(Integer.class);
                             postsCount++;
 
-                            dataSnapshot.getRef().setValue(postsCount);
+                            dataSnapshot.getRef().setValue(postsCount)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.getException() != null){
+                                        try { throw task.getException(); }
+                                        catch (Exception e ){
+                                            e.printStackTrace();
+                                            Log.d("USER_TEST_EROR", "onComplete: "+e.getMessage());
+                                        }
 
-                            goMainActivity();
+                                    }else {
+
+                                        goMainActivity();
+                                    }
+                                }
+                            });
                         }
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
     }
 
@@ -210,8 +225,8 @@ public class PostActivity extends AppCompatActivity {
     private void goMainActivity() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
-        ActivityCompat.finishAffinity(this);
-        BitmapHelper.getInstance().clear();
+        if (BitmapHelper.getInstance().clear())
+            finishAffinity();
     }
 
     /** #############################    ACTIVITY PROCESSES    ################################ **/
