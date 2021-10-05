@@ -10,12 +10,12 @@
 >> <br />
 > 
 > - ## Demonstration 
->   - [Register](https://github.com/shanxg/Clone_OLX#-announcements-)
->   - [User profile](https://github.com/shanxg/Clone_OLX#-login--register-)
->   - [Creating new post](https://github.com/shanxg/Clone_OLX#-publishing-announcement-)
->   - [Search Users](https://github.com/shanxg/Clone_OLX#-deleting-announcement-)
->   - [Post Feed, Likes and Comments](https://github.com/shanxg/Clone_OLX#-search-filters-)
->   - ### [Full video demonstration](https://github.com/shanxg/Clone_OLX#check-demonstration-videos)
+>   - [Register](https://github.com/shanxg/Clone_Instagram#-register-)
+>   - [User profile](https://github.com/shanxg/Clone_Instagram#-user-profile-)
+>   - [Creating new post](https://github.com/shanxg/Clone_Instagram#-creating-new-post-)
+>   - [Search Users](https://github.com/shanxg/Clone_Instagram#-search-users-)
+>   - [Post Feed, Likes and Comments](https://github.com/shanxg/Clone_Instagram#-post-feed-likes-and-comments-)
+>   - ### [Full video demonstration](https://github.com/shanxg/Clone_Instagram#check-demonstration-videos)
 >   
 >   <br>
 
@@ -25,7 +25,7 @@
   > ### <div align="center"> *Register* </div> 
   > <br> 
   >
-  > ![OLX_announcements](https://user-images.githubusercontent.com/63316622/135891237-01178eab-6786-40b5-bf8a-a45672a73932.gif)
+  > ![Insta_reg](https://user-images.githubusercontent.com/63316622/136059324-8071c6c7-da22-4adf-ba6d-f34b965cdef2.gif)![Insta_reg(fir)](https://user-images.githubusercontent.com/63316622/136059331-956a870e-eb90-4006-9168-5899f181c57b.gif)
   >
   > <br>
   
@@ -35,8 +35,7 @@
   > ### <div align="center"> *User profile* </div> 
   > <br> 
   >
-  >  ![OLX_login Register(fir)](https://user-images.githubusercontent.com/63316622/135892287-5acd899a-fb4b-4c39-b8c7-8dabccc14e4f.gif)
-![OLX_login Register(fir)](https://user-images.githubusercontent.com/63316622/135891986-769d6e98-0dc9-4b64-a101-0a1bc0c151c7.gif)
+  > ![Insta_settings](https://user-images.githubusercontent.com/63316622/136059412-d5054871-f4b7-481a-b902-078e5d09e297.gif)![Insta_settings(fir)](https://user-images.githubusercontent.com/63316622/136059430-e2a4ba9c-0573-431b-a437-263e3b738fd0.gif)
   >
   > <br>
   
@@ -47,7 +46,7 @@
   > ### <div align="center"> *Creating new post* </div> 
   > <br> 
   >
-  > ![OLX_register_post(fir)](https://user-images.githubusercontent.com/63316622/135892355-5bb6f3d1-7912-4de8-afde-4104f4601096.gif)![OLX_register_post(fir)](https://user-images.githubusercontent.com/63316622/135892378-9e132b92-c64b-401c-8425-724e4b3e330a.gif)
+  > ![Insta_create_post](https://user-images.githubusercontent.com/63316622/136059508-985bd2cd-448a-4007-836c-75eaf5068aff.gif)![Insta_create_post(fir)](https://user-images.githubusercontent.com/63316622/136059521-215f1fef-957f-4ff6-8093-82408826b3cc.gif)
   >
   > <br>
   ---------------------------------
@@ -56,7 +55,7 @@
   > ### <div align="center"> *Search Users* </div> 
   > <br> 
   >
-  > ![OLX_deletePost](https://user-images.githubusercontent.com/63316622/135892527-e16ec181-2bc4-4a61-b8a6-42a773dcd083.gif)![OLX_deletePost(fir)](https://user-images.githubusercontent.com/63316622/135892552-948bf9ca-3292-4127-8eef-9d60e3de37ef.gif)
+  > ![Insta_search_profile_and_follow](https://user-images.githubusercontent.com/63316622/136059582-265ee2cb-4a28-4f8f-b357-43fd635d3f06.gif)![Insta_search_profile_and_follow(fir)](https://user-images.githubusercontent.com/63316622/136059588-f4e5329e-00ea-4da0-92e7-c07f8917e56b.gif)
   >
   > <br>
   ---------------------------------
@@ -65,7 +64,7 @@
   > ### <div align="center"> *Post Feed, Likes and Comments* </div> 
   > <br> 
   >
-  > ![OLX_search_filters](https://user-images.githubusercontent.com/63316622/135892773-ec7de6ac-25ce-4cf2-b13d-42f2a50f1022.gif)
+  > ![Insta_posts_likes_coms](https://user-images.githubusercontent.com/63316622/136059667-ca65bb0c-094e-487c-84ea-208c1f91ff23.gif)![Insta_posts_likes_coms(fir)](https://user-images.githubusercontent.com/63316622/136059718-0b1406ef-720d-47a2-a29b-d21a6eaf6170.gif)
   >
   >  <br>
 
